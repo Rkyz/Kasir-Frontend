@@ -1,0 +1,51 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  @apply bg-Gray
+}
+
+.hidden-scroll::-webkit-scrollbar{
+  display: none;
+}
+
+/* src/styles/tippy-custom-theme.css */
+
+
+.tippy-box[data-theme~='tomato'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: tomato;
+}
+
+.transition-height {
+  transition: height 0.3s ease-in-out; /* Adjust the duration and timing function as needed */
+}
+
+/* HTML: <div class="loader"></div> */
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 30px;
+  height: 30px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 6px solid;
+  border-color: #fff #0000;
+  animation: l1 1s infinite;
+}
+@keyframes l1 {to{transform: rotate(.5turn)}}
+
+.custom-select {
+  -webkit-appearance: none; /* Hide the default arrow in Chrome, Safari */
+  -moz-appearance: none; /* Hide the default arrow in Firefox */
+  appearance: none; /* Hide the default arrow in other browsers */
+  background-image: none; /* Hide the default arrow in IE */
+}
+
+
+.custom-shadow{
+  box-shadow: 0px 3px 44px -9px rgba(188,161,161,1);
+  -webkit-box-shadow: 0px 3px 44px -9px rgba(188,161,161,1);
+  -moz-box-shadow: 0px 3px 44px -9px rgba(188,161,161,1);
+}
