@@ -22,7 +22,7 @@ const Option = () => {
     }, []);
 
     return (
-        <div className={`p-[10px] h-[60px] w-full transition-all duration-500 max-w-full w-full  shadow-md bg-white flex gap-[15px] rounded-md ${hasBorder ? 'shadow-lg' : ''}`}>
+        <div className={`p-[10px] h-[60px] transition-all duration-500  w-full flex gap-[15px]  rounded-md ${hasBorder ? 'shadow-lg' : ''}`}>
             <Swiper
                 spaceBetween={10}
                 slidesPerView='8'

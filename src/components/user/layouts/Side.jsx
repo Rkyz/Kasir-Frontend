@@ -1,49 +1,47 @@
-import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { HiOutlineHome } from "react-icons/hi";
-import { IoPeopleOutline } from "react-icons/io5";
-import { MdEmail, MdOutlineTableBar } from "react-icons/md";
-import { IoFastFoodOutline } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
-import { CgProfile } from 'react-icons/cg';
-import { useLocation } from 'react-router-dom';
+import { useToggle } from '../../../utils/Handle';
+import useHookLocation from '../../../utils/Path';
+import Icon from '../../../utils/Icon';
 
 const Side = ({closeToggle}) => {
-    const path = useLocation();
-    const currentPath = path.pathname;
-    console.log(currentPath,'hello')
-    const [openProfile, setOpenProfile] = useState(false)
-    const handleOpenProfile = () => {
-        setOpenProfile(!openProfile)
-    }
+    const location = useHookLocation();
+    const currentPath = location.pathname;
+    const [openProfile, handleOpenProfile] = useToggle(false)
   return (
     <div className={`h-full z-[40] flex-col flex justify-between fixed bg-white  pb-[25px] pt-[76px] items-center ${closeToggle ? 'sm:hidden':'max-sm:hidden'}`}>
         
         <ul className='flex items-center flex-col w-full px-[7px] gap-[5px] '>
             <li className='w-full'>
                 <Link to="/" className={`flex items-center flex-col w-[70px] justify-center h-[70px] rounded-md capitalize ${currentPath === '/' ? 'text-Yellow border-[2px] bg-opacity-15 border-Yellow bg-Yellow ':'hover:bg-Gray '}`}>
-                    <HiOutlineHome className='text-[20px]'/>
+                    <Icon name="IoPeopleOutline" className='text-[20px]'/>
                     <p className='text-[14px]'>home</p>
                 </Link>
             </li>
             <li>
-            <Link to="/customer" className={`flex items-center flex-col capitalize w-[70px] justify-center h-[70px]  rounded-md ${currentPath === '/customer' ? 'text-Yellow border-[2px] bg-opacity-15 border-Yellow bg-Yellow':'hover:bg-Gray '}`}>
-                    <IoPeopleOutline className='text-[20px]'/>
+            <Link to="/customer" className={`flex items-center flex-col capitalize w-[70px] justify-center h-[70px]  rounded-md ${currentPath === '/customer' || currentPath === '/customer/' ? 'text-Yellow border-[2px] bg-opacity-15 border-Yellow bg-Yellow':'hover:bg-Gray '}`}>
+                    <Icon name="IoPeopleOutline" className='text-[20px]'/>
                     <p className='text-[14px]'>customer</p>
                 </Link>
             </li>
             <li>
-            <Link className={`flex items-center flex-col capitalize w-[70px] justify-center h-[70px] text-black rounded-md ${currentPath === '/table' ? 'text-Yellow border-[2px] bg-opacity-15 border-Yellow bg-Yellow':'hover:bg-Gray'}`}>
-                    <MdOutlineTableBar className='text-[20px]'/>
-                    <p className='text-[14px]'>tables</p>
+            <Link to="/product" className={`flex items-center flex-col capitalize w-[70px] justify-center h-[70px] rounded-md ${currentPath === '/product' || currentPath === '/product/' ? 'text-Yellow border-[2px] bg-opacity-15 border-Yellow bg-Yellow':'hover:bg-Gray'}`}>
+                    <Icon name="IoFastFoodOutline" className='text-[20px]'/>
+                    <p className='text-[14px]'>product</p>
                 </Link>
             </li>
             <li>
-            <Link className={`flex items-center flex-col capitalize w-[70px] justify-center h-[70px] text-black rounded-md ${currentPath === '/order' ? 'text-Yellow border-[2px] bg-opacity-15 border-Yellow bg-Yellow':'hover:bg-Gray'}`}>
-                    <IoFastFoodOutline className='text-[20px]'/>
-                    <p className='text-[14px]'>order</p>
+            <Link to="/history" className={`flex items-center flex-col capitalize w-[70px] justify-center h-[70px] rounded-md ${currentPath === '/history' || currentPath === '/history/' ? 'text-Yellow border-[2px] bg-opacity-15 border-Yellow bg-Yellow':'hover:bg-Gray'}`}>
+                    <Icon name="GrHistory" className='text-[18px]'/>
+                    <p className='text-[14px]'>order </p>
                 </Link>
             </li>
+            {/* <li>
+            <Link className={`flex items-center flex-col capitalize w-[70px] justify-center h-[70px] text-black rounded-md ${currentPath === '/table' || currentPath === '/table/' ? 'text-Yellow border-[2px] bg-opacity-15 border-Yellow bg-Yellow':'hover:bg-Gray'}`}>
+                    <MdOutlineTableBar className='text-[20px]'/>
+                    <p className='text-[14px]'>tables</p>
+                </Link>
+            </li> */}
         </ul>
         <ul className='flex items-center flex-col w-full px-[7px] gap-[10px] '>
             <li className='relative'>
@@ -63,7 +61,7 @@ const Side = ({closeToggle}) => {
                             <div className='flex flex-col gap-[5px]'>
                                 <p className='font-Roboto font-medium text-[18px] capitalize'>rio alamsyah</p>
                                 <div className='flex gap-[7px] items-center text-Yellow'>
-                                    <MdEmail className='text-[20px]'/>
+                                    <Icon name="MdEmail" className='text-[20px]'/>
                                 <p className='text-[14px]'>Admin@gmail.com</p>
                                 </div>
                             </div>

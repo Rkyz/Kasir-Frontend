@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { RouterProvider } from "react-router-dom";
 import "./index.css";
 import "./App.css";
-import router from "./routes/Route.jsx";
+import 'tippy.js/animations/scale.css';
+import 'tippy.js/dist/tippy.css';
+import router from "./routes/route.jsx";
+import { ProductProvider } from "./context/ProductContext.jsx";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const Main = () => {
+  
   return (
     <>
       <React.StrictMode>
+         <ProductProvider>
            <RouterProvider router={router} /> 
+          </ProductProvider>
       </React.StrictMode>
     </>
   );

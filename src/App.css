@@ -34,6 +34,15 @@ body{
   border-color: #fff #0000;
   animation: l1 1s infinite;
 }
+.loader-second {
+  width: 25px;
+  height: 25px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 6px solid;
+  border-color: black #0000;
+  animation: l1 1s infinite;
+}
 @keyframes l1 {to{transform: rotate(.5turn)}}
 
 .custom-select {
@@ -48,4 +57,29 @@ body{
   box-shadow: 0px 3px 44px -9px rgba(188,161,161,1);
   -webkit-box-shadow: 0px 3px 44px -9px rgba(188,161,161,1);
   -moz-box-shadow: 0px 3px 44px -9px rgba(188,161,161,1);
+}
+
+.icon-transition {
+  transition: transform 0.3s ease-in-out;
+}
+
+.icon-transition.rotate {
+  transform: rotate(180deg);
+}
+
+input[type=number]::-webkit-inner-spin-button
+{
+  display: none;
+}
+
+input[type=number]{
+  @apply w-auto
+}
+
+.Toastify__progress-bar--success {
+  @apply bg-white text-white
+}
+
+.hidden-scroll::-webkit-scrollbar{
+  display: none;
 }

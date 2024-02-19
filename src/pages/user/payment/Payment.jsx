@@ -1,77 +1,100 @@
 
+// import { useEffect, useRef, useState } from "react"
+
+import List from "../../../components/user/payments/list";
 import Top from "../../../components/user/layouts/Top"
-import { IoMdCloseCircle } from "react-icons/io";
-import { GrFormNext } from "react-icons/gr";
-import { useEffect, useRef, useState } from "react"
+import Money from "../../../components/user/payments/money";
 import 'tippy.js/animations/scale.css';
 import 'tippy.js/dist/tippy.css';
-import Itemku from "../../../components/user/homes/ItemPayment"
-import { GoDot, GoDotFill } from "react-icons/go";
-import List from "../../../components/user/payments/list";
-import Money from "../../../components/user/payments/money";
-import { MdDelete, MdPayments } from "react-icons/md";
-import { CgDollar, CgTrash } from "react-icons/cg";
-import { FiDollarSign } from "react-icons/fi";
-import { LuDollarSign } from "react-icons/lu";
+import { useToggle } from "../../../utils/Handle"
+import useInput from "../../../utils/Input"
+import setStatusOffline from "../../../utils/Offline"
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createPelanggan } from "../../../services/penjualan.service";
+import Swal from "sweetalert2";
+import Icon from "../../../utils/Icon";
+
+
 
 const Payment = () => {
-    const [details, setDetails] = useState(false);
-    const handleDetails = () => {
-        setDetails(!details)
-    }
-    const [openPayment, setOpenpayment] = useState(false);
-    const handleOpenPayment = () => {
-        setOpenpayment(!openPayment)
-    }
-
-    const [inputValue, setInputValue] = useState('');
-
-    const handleButtonClick = (value) => {
-      setInputValue((prevValue) => prevValue + value);
-    };
-  
-    const handleDeleteClick = () => {
-      setInputValue((prevValue) => prevValue.slice(0, -1));
-    };
-  
-    const handleCancelClick = () => {
-      setInputValue('');
-    };
-
-    const buttonsRef = useRef([]);
+    const [details, handleDetails] = useToggle(false);
+    const offlineStatus = setStatusOffline();
+    const { inputValue, setInputValue, handleButtonClick, handleCancelClick, handleDeleteClick } = useInput();
+    const navigate = useNavigate(); // Initialize useNavigate hook
+    const [dataCart, setDataCart] = useState([]);
+    const [dataPelanggan, setDataPelanggan] = useState(null);
 
     useEffect(() => {
-        document.addEventListener('keydown', handleKeyDown);
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
+        const cartData = JSON.parse(sessionStorage.getItem('cartData'));
+        const pelangganData = JSON.parse(sessionStorage.getItem('pelangganData'));
+        setDataCart(cartData)
+        setDataPelanggan(pelangganData)
+      
+        if (!cartData || !pelangganData) {
+            navigate('/'); // Redirect to home if data is not available
+        } else if (cartData.length > 0 || pelangganData.length > 0) {}
+    }, [navigate]);
 
-    const handleKeyDown = event => {
-        const { key } = event;
-        if (key >= '0' && key <= '9') {
-            setInputValue(prevValue => prevValue + key);
-        } else if (key === 'Backspace') {
-            setInputValue(prevValue => prevValue.slice(0, -1));
+    // console.log(dataCart[0].JumlahProduk)
+
+    const handleSubmit = async () => {
+        const payload = {
+            TanggalPenjualan: new Date().toISOString().slice(0, 10),
+            PelangganID: dataPelanggan,
+            details: dataCart.map(item => ({
+                ProdukID: item.ProdukID,
+                JumlahProduk: item.JumlahProduk
+            }))
+        };
+
+        try {
+            await createPelanggan(payload);
+            console.log('Data berhasil terkirim');
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Data has been submitted successfully!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Hapus session
+                    sessionStorage.removeItem('cartData');
+                    sessionStorage.removeItem('pelangganData');
+                    // Muat ulang halaman
+                    window.location.reload();
+                }
+            })
+        } catch (error) {
+            console.error('Gagal mengirim data:', error);
         }
     };
+
   return (
     <div className="w-full h-screen">
-        <Top handleOpenPayment={handleOpenPayment}/>
+        <Top offlineStatus={offlineStatus} />
         <div className="flex h-full w-full">
+        {offlineStatus && (
+                <div className="bg-black w-full h-screen flex-col pt-[64px] bg-opacity-50 backdrop-blur-sm fixed z-[45] text-neutral-100 flex items-center justify-center text-[30px] font-Roboto font-bold capitalize">
+                    <Icon name="RiWifiOffLine" className="text-[50px]"/>
+                    <div className="flex items-center gap-[10px]">
+                    <p>you are offline</p>
+                    <div className="loader"/>
+                    </div>
+                </div>
+                    )}
             {/* <Side/> */}
             <div className="bg-transparent grid grid-cols-2 max-lg:grid-rows-subgrid max-lg:grid-cols-1 gap-[10px] w-full h-full text-black pl-[15px] pt-[79px] pr-[15px] pb-[15px] ">
                 <div className="w-full h-full bg-white relative lg:overflow-y-scroll max-lg:order-1">
                     <div className="w-full bg-transparent border-b absolute border-black border-opacity-30 p-[15px]">
-                        <p className="text-[20px] font-Roboto text-black capitalize font-bold">order <span className="uppercase">id</span> #2112123</p>
+                        <p className="text-[20px] font-Roboto text-black capitalize font-bold">order <span className="uppercase">id</span> #{dataPelanggan}</p>
                             <div className="flex justify-between items-center">
                                 <p className="text capitalize text-[14px] font-Roboto text-opacity-80 text-black font-medium">vincenus lobo</p>
-                                <p className="flex items-center capitalize gap-[7px] font-normal font-Roboto text-opacity-80 text-black">dine in <GoDotFill className="text-[8px]"/> 7.43</p>
+                                <p className="flex items-center capitalize gap-[7px] font-normal font-Roboto text-opacity-80 text-black">dine in <Icon name="GoDotFill" className="text-[8px]"/> 7.43</p>
                             </div>
                     </div>
                     <div className="w-full pt-[84.8px] bg-transparent h-full flex items-center flex-col justify-between">
                         <div className="w-full bg-transparent h-auto flex flex-col items-center">
-                                <List handleDetails={handleDetails} GrFormNext={GrFormNext} IoMdCloseCircle={IoMdCloseCircle} details={details} />
+                                <List dataCart={dataCart} handleDetails={handleDetails}  details={details} />
                                 <Money/>
                         </div>
                         <div className="w-full p-[10px] flex flex-col gap-[15px]">
@@ -85,8 +108,8 @@ const Payment = () => {
                                     <p>-5.0</p>
                                 </div>
                             </div>
-                            <button className="bg-[#09A327] capitalize flex items-center justify-center gap-[5px] text-white p-[15px] rounded-md ">
-                                <MdPayments className="text-[20px]"/>
+                            <button onClick={handleSubmit} className="bg-[#09A327] capitalize flex items-center justify-center gap-[5px] text-white p-[15px] rounded-md ">
+                                <Icon name="MdPayments" className="text-[20px]"/>
                                 <p className="text-[18px]">confirm payment</p>
                             </button>
                         </div>
@@ -110,7 +133,7 @@ const Payment = () => {
                             </div>
                             </div>
                             <button className="w-[45px] text-[20px] h-[45px] rounded-md bg-Gray flex items-center justify-center">
-                                <CgTrash/>
+                                <Icon name="CgTrash"/>
                             </button>
                         </div>
                     </div>
@@ -129,7 +152,7 @@ const Payment = () => {
                             <button onClick={() => handleButtonClick('00')} className="bg-Gray rounded-sm text-[20px] font-bold max-lg:p-[20px]">00</button>
                             <button onClick={() => handleButtonClick('0')} className="bg-Gray rounded-sm text-[20px] font-bold max-lg:p-[20px]">0</button>
                             <button onClick={() => handleDeleteClick()} className="bg-Gray rounded-sm text-[25px] font-bold flex items-center justify-center max-lg:p-[20px]">
-                                <MdDelete/>
+                                <Icon name="MdDelete"/>
                             </button>
                             <button onClick={() => handleCancelClick()} className="bg-Gray capitalize col-span-2 rounded-sm text-[20px] font-bold p-[20px]">
                                 cancel
@@ -147,4 +170,4 @@ const Payment = () => {
   )
 }
 
-export default Payment
+export default Payment;

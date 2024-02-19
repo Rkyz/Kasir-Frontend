@@ -1,133 +1,151 @@
-import { FiBook, FiPlus } from "react-icons/fi"
-import Item from "../../../components/user/homes/ItemDashboard"
-import Option from "../../../components/user/homes/option"
-import Side from "../../../components/user/layouts/Side"
-import Top from "../../../components/user/layouts/Top"
-import { HiOutlineRefresh } from "react-icons/hi"
-import { IoMdCloseCircle } from "react-icons/io";
-import { GrFormNext, GrNext, GrPrevious } from "react-icons/gr";
-import { IoPlayCircleOutline } from "react-icons/io5";
-import { useEffect, useState } from "react"
-import Tippy from '@tippyjs/react';
-import Nav from "../../../components/user/homes/Nav"
-import 'tippy.js/animations/scale.css';
-import 'tippy.js/dist/tippy.css';
-import Itemku from "../../../components/user/homes/ItemPayment"
-import Price from "../../../components/user/homes/Price"
-import { RiWifiOffLine } from "react-icons/ri";
-import { MdNextPlan } from "react-icons/md"
-import { useLocation } from "react-router-dom"
-
+import {
+    Top, Warning, Payment, Item, Option, Side, Tippy
+} from "../../../utils/Index"
+import { useToggle } from '../../../utils/Handle';
+import setStatusOffline from "../../../utils/Offline"
+import {useState, useEffect} from "../../../utils/React"
+import {getProdukData, getPelanggan} from "../../../utils/Service"
+import Product from '../../../components/user/modal/Product';
+import handleAddToCookie from "../../../utils/Payment/PaymentUtils";
+import Offline from "../../../components/user/offline/Offline";
+import PaymentMiddleware from "../../../middleware/PaymentMiddleware";
+import Icon from "../../../utils/Icon";
 
 const Home = () => {
-    const [details, setDetails] = useState(false);
-    const handleDetails = () => {
-        setDetails(!details)
-    }
-    const [detailsDiscount, setDetailsDiscount] = useState(false);
-    const handleDetailsDiscount = () => {
-        setDetailsDiscount(!detailsDiscount)
-    }
-    const [openPayment, setOpenpayment] = useState(false);
-    const handleOpenPayment = () => {
-        setOpenpayment(!openPayment)
-    }
-    const [closeToggle, setCloseToggle] = useState(false);
-    const handleCloseToggle = () => {
-        setCloseToggle(!closeToggle)
-    }
-    const [openDropdown, setOpenDropdown] = useState(false);
-    const handleOpenDropdown = () => {
-        setOpenDropdown(!openDropdown)
-    }
-    const [offlineStatus, setOfflineStatus] = useState(!navigator.onLine);
+    const [details, handleDetails] = useToggle(false);
+    const [detailsDiscount, handleDetailsDiscount] = useToggle(false);
+    const [openPayment, handleOpenPayment] = useToggle(false);
+    const [closeToggle, handleCloseToggle] = useToggle(false);
+    const [openDropdown, handleOpenDropdown] = useToggle(false);
+    const [openProduct, handleOpenProduct] = useToggle(false);
+    const [openSetting, handleOpenSetting] = useToggle(false);
+    const [loading, setLoading] = useState(true);
+    const [produkData, setProdukData] = useState(null);
+    const [pelangganData, setPelangganData] = useState(null);
+    const [produkID, setProdukID] = useState(null);
+    const offlineStatus = setStatusOffline();
+    PaymentMiddleware();
 
     useEffect(() => {
-      const handleOnline = () => {
-        setOfflineStatus(false);
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const response = await getProdukData();
+          setProdukData(response.data.data);
+
+        } catch (error) {
+            console.error(error)
+        }
       };
   
-      const handleOffline = () => {
-        setOfflineStatus(true);
-      };
-  
-      window.addEventListener('online', handleOnline);
-      window.addEventListener('offline', handleOffline);
-  
-      return () => {
-        window.removeEventListener('online', handleOnline);
-        window.removeEventListener('offline', handleOffline);
-      };
+      const fetchDataPelanggan = async () => {
+          try {
+              const response = await getPelanggan();
+              setPelangganData(response.data.data);
+            } catch (error) {
+            console.error(error)
+            }
+        };
+
+      fetchDataPelanggan();
+      fetchData();
     }, []);
 
-    const path = useLocation();
-    const currentPath = path.pathname;
-    console.log(offlineStatus,'test')
-  
-  return (
-    <div className={`w-full h-auto ${offlineStatus || openPayment ? 'max-h-screen overflow-hidden':''}`}>
-        <Top offlineStatus={offlineStatus} currentPath={currentPath} handleOpenPayment={handleOpenPayment} openPayment={openPayment} handleCloseToggle={handleCloseToggle} closeToggle={closeToggle} openDropdown={openDropdown} handleOpenDropdown={handleOpenDropdown}/>
-        <div className="flex h-full w-full relative">
-             {offlineStatus && (
-                <div className="bg-black w-full h-screen flex-col pt-[64px] bg-opacity-50 backdrop-blur-sm fixed z-[45] text-neutral-100 flex items-center justify-center text-[30px] font-Roboto font-bold capitalize">
-                    <RiWifiOffLine className="text-[50px]"/>
-                    <div className="flex items-center gap-[10px]">
-                    <p>you are offline</p>
-                    <div className="loader"/>
-                    </div>
-                </div>
-                    )}
-            <Side closeToggle={closeToggle}/>
-            {closeToggle && (
-                <div className="w-full h-full bg-black bg-opacity-30 sm:hidden fixed z-[30]"/>
-            )}
-            
-            <div className={`bg-transparent w-full h-full text-black  pt-[79px] pr-[15px] pb-[15px] flex  ${closeToggle ? 'max-sm:pl-[15px] sm:pl-[15px]':'max-sm:pl-[15px] sm:pl-[100px]'} `}>
-                <div className=" w-full gap-[15px] relative">
-                    <div className="w-full flex sticky top-[79px] gap-[10px] items-center ">
-                    <Option/>
-                   
-                    </div>
-                    <Item/>
-                </div>
-                {openPayment && (
-                    <>
-                       <div className='w-full h-full fixed z-40 bg-black bg-opacity-30 left-0 top-0'/>
-                <div className={`fixed h-auto w-full  overflow-auto max-h-full sm:max-w-[400px] z-40 bg-transparent right-0 top-0 pt-[64px] text-black transition-all duration-1000 ease-in-out `}>
-                    <div className="h-full bg-transparent shadow-2xl w-full  flex-col flex ">
-                        <Nav HiOutlineRefresh={HiOutlineRefresh} FiPlus={FiPlus} FiBook={FiBook} Tippy={Tippy}/>
-                        <div className="flex bg-white flex-col gap-[10px] p-[10px]">
-                            <Itemku handleDetails={handleDetails} GrFormNext={GrFormNext} IoMdCloseCircle={IoMdCloseCircle} details={details} />
-                        </div>
-                        <div className="w-full h-auto bg-white p-[10px]">
-                        {/* <div className="flex justify-between items-center bg-Yellow bg-opacity-15 p-[10px] rounded-md">
-                            <p className="capitalize font-semibold">add</p>
-                            <div className="flex gap-[10px] ">
-                                <button className="capitalize text-Yellow font-Roboto font-semibold text-[14px]">discount</button>
-                                <button className="capitalize text-Yellow font-Roboto font-semibold text-[14px]">coupon code</button>
-                                <button className="capitalize text-Yellow font-Roboto font-semibold text-[14px]">note</button>
-                            </div>
-                        </div> */}
-                        </div>
-                        <Price detailsDiscount={detailsDiscount} handleDetailsDiscount={handleDetailsDiscount}/>
-                        <div className="grid font-bold pb-[15px] bg-white grid-cols-1 p-[10px] gap-[10px] text-white">
-                            {/* <button className="bg-[#F27B15] flex items-center justify-center gap-[10px] p-[15px] rounded-md capitalize">
-                                <IoPlayCircleOutline className="text-[20px]"/>
-                                <p>hold cart</p>
-                            </button> */}
-                            <button className="bg-[#07A326] flex items-center justify-center gap-[10px] p-[15px] rounded-md capitalize">
-                                <IoPlayCircleOutline className="text-[20px]"/>
-                                <p>process</p>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                    </>
+    const [quantity, setQuantity] = useState(1);
+
+    const handleChangeQuantity = (e) => {
+        const value = parseInt(e.target.value);
+        if (value >= 0) {
+            setQuantity(value);
+        } else {
+            setQuantity(0);
+        }
+    };
+    const handleOneOnOneQuantity = () => {
+        const newQuantity = 1; 
+        setQuantity(newQuantity); 
+        handleAddToCookie(produkID, newQuantity); 
+    };
+    
+    
+    const handleAddToCookieLocal = () => {
+        handleAddToCookie(produkID, quantity, handleOpenProduct);
+    };
+
+    // Mendapatkan nilai sessionType dari session storage saat komponen dimuat
+  const initialSessionType = sessionStorage.getItem('sessionType') || '';
+
+  const [sessionType, setSessionType] = useState(initialSessionType);
+
+  const handleInputClick = () => {
+    setSessionType('input');
+    sessionStorage.setItem('sessionType', 'input'); // Menyimpan nilai sessionType dalam session storage
+    sessionStorage.removeItem('cartData');
+
+    
+  };
+
+  const handleButtonClick = () => {
+    setSessionType('button');
+    sessionStorage.setItem('sessionType', 'button'); // Menyimpan nilai sessionType dalam session storage
+    sessionStorage.removeItem('cartData');
+  };
+    
+
+
+    const cartData = JSON.parse(sessionStorage.getItem('cartData')) || [];
+
+    return (
+        <div className={`w-full h-auto ${offlineStatus || openPayment || openSetting  ? 'max-h-screen overflow-hidden':''}`}>
+            <Top openSetting={openSetting} handleOpenSetting={handleOpenSetting} pelangganData={pelangganData} offlineStatus={offlineStatus}  handleOpenProduct={handleOpenProduct} handleOpenPayment={handleOpenPayment} openPayment={openPayment} handleCloseToggle={handleCloseToggle} closeToggle={closeToggle} openDropdown={openDropdown} handleOpenDropdown={handleOpenDropdown} openProduct={openProduct}/>
+            <div className="flex h-full w-full relative">
+                <Offline offlineStatus={offlineStatus}/>
+                <Side closeToggle={closeToggle}/>
+                {closeToggle && (
+                    <div className="w-full h-full bg-black bg-opacity-30 sm:hidden fixed z-[30]"/>
                 )}
+                <Product  openProduct={openProduct} handleOpenProduct={handleOpenProduct} produkID={produkID} handleChangeQuantity={handleChangeQuantity} quantity={quantity} handleAddToCookieLocal={handleAddToCookieLocal}/>
+                <div className={`bg-transparent w-full h-full text-black pt-[79px] pr-[15px] pb-[15px] flex ${closeToggle ? 'max-sm:pl-[15px] sm:pl-[15px]':'max-sm:pl-[15px] sm:pl-[100px]'} `}>
+                    <div className="w-full gap-[15px] relative">
+                        <div className={`w-full flex sticky bg-white rounded-md top-[79px] gap-[10px] items-center ${offlineStatus ? 'z-0':'z-20'} ${openPayment || openProduct ? 'z-10':'z-50'}`}>
+                            
+                            <Option/>
+                        </div>
+                        <Item handleOneOnOneQuantity={handleOneOnOneQuantity} produkData={produkData} setProdukID={setProdukID} handleOpenProduct={handleOpenProduct} loading={loading} setLoading={setLoading}/>
+                    </div>
+                 <Payment openPayment={openPayment} pelangganData={pelangganData} Tippy={Tippy}  details={details} handleDetailsDiscount={handleDetailsDiscount}  handleDetails={handleDetails} detailsDiscount={detailsDiscount} cartData={cartData}/>
+                </div>
+                <Warning openPayment={openPayment} pelangganData={pelangganData} handleOpenPayment={handleOpenPayment}/>
             </div>
+            {openSetting && (
+            <div className='fixed z-[50] flex items-center justify-center top-[60px] w-full h-full bg-black bg-opacity-30'>
+                 <div className="bg-white relative p-[30px] flex flex-col gap-[20px] rounded-md w-auto text-center">
+                    <div>
+                    <p className="capitalize font-Roboto text-[22px] font-bold">setting set product</p>
+                    <p className="text-nowrap capitalize text-[14px] text-gray-500">select your option to set up your product what to be you can use</p>
+                    </div>
+                    <div className="flex flex-col w-full gap-[10px]">
+                        <button onClick={handleInputClick} className="border border-black border-opacity-20 hover:bg-Yellow text-black hover:text-white flex p-[20px] items-center rounded-md gap-[20px]">
+                            <Icon name="GoNumber" className="text-[30px]"/>
+                            <div className="flex flex-col items-start text-left gap-[5px]">
+                                <p className="text-[17px] font-Roboto font-bold">Input</p>
+                                <p className="text-[13px] font-Roboto text-opacity-50 capitalize">this option make u input your product using input with custom value product</p>
+                            </div>
+                        </button>
+                        <button onClick={handleButtonClick} className="border border-black border-opacity-20 hover:bg-Yellow text-black hover:text-white flex p-[20px] items-center rounded-md gap-[20px]">
+                            <Icon name="GiClick" className="text-[25px]"/>
+                            <div className="flex flex-col items-start text-left gap-[5px]">
+                                <p className="text-[17px] font-Roboto font-bold">Button</p>
+                                <p className="text-[13px] font-Roboto text-opacity-50 capitalize">this option make u input your product using button one on one</p>
+                            </div>
+                        </button>
+                    </div>
+                 </div>
+             </div>
+
+            )}
         </div>
-    </div>
-  )
+    );
 }
 
-export default Home
+export default Home;
