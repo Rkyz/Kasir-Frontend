@@ -32,6 +32,23 @@ const Option = () => {
                 // }}
                 mousewheel={true}
                 modules={[Mousewheel]}
+                breakpoints={{
+                    0:{
+                        slidesPerView: 4
+                    },
+                    // When window width is >= 640px
+                    640: {
+                        slidesPerView: 5,
+                    },
+                    // When window width is >= 768px
+                    768: {
+                        slidesPerView: 6,
+                    },
+                    // When window width is >= 1024px
+                    1024: {
+                        slidesPerView: 9,
+                    },
+                }}
             >
                 <SwiperSlide>
                     <button className="capitalize font-medium font-Roboto h-full bg-Yellow text-Yellow p-[5px] bg-opacity-15 rounded-md border-[2px] border-Yellow">started</button>

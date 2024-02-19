@@ -8,6 +8,7 @@ import {useState, useEffect} from "../../../utils/React"
 import {getAllDetail, searchDetail} from "../../../utils/Service"
 import Offline from "../../../components/user/offline/Offline";
 import piring from "../../../assets/piring.png"
+import Backoffline from "../../../components/user/offline/BackOffline";
 
 const History = () => {
     const [details, handleDetails] = useToggle(false);
@@ -18,8 +19,11 @@ const History = () => {
     const [detailData, setdetailData] = useState(null);
     const [detailDataById, setdetailDataById] = useState();
     const [itemDetail, setItemDetail] = useState(null);
+    const [totalHarga, setTotalHarga] = useState(null);
     const offlineStatus = setStatusOffline();
     const cartData = JSON.parse(sessionStorage.getItem('cartData')) || [];
+
+    console.log(totalHarga)
 
     useEffect(() => {
         const fetchDetailPenjualan = async () => {
@@ -40,7 +44,8 @@ const History = () => {
                 const response = await searchDetail(id);
                 setdetailDataById(response.data.data);
                 setItemDetail(response.data.data.items)
-                console.log(response.data.data.items,'Hello Guys')
+                setTotalHarga(response.data.data.PenjualanID.TotalHarga)
+                console.log(response.data.data.PenjualanID,'Hello Guys')
                 console.log(response.data)
               } catch (error) {
               console.error(error)
@@ -61,11 +66,15 @@ const History = () => {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(number).replace(",00", "");
         };
 
-        const lengthOfDetailDataById = detailDataById ? Object.keys(detailDataById).length : 0;
-        console.log("Panjang data detailDataById:", lengthOfDetailDataById);
+        const lengthOfDetailDataById = detailDataById ? Object.keys(detailDataById).length  : 0;
+        const lengthDetail = detailDataById ? Object.keys(itemDetail).length  : 0;
+        console.log("Panjang data detailDataById:", lengthDetail);
         
         
 
+        const closeDetailDataById = () => {
+            setdetailDataById(null); // Set detailDataById to null to close it
+        };
   
   return (
     <div className={`w-full h-auto ${offlineStatus || openPayment ? 'max-h-screen overflow-hidden':''}`}>
@@ -73,11 +82,9 @@ const History = () => {
     <div className="flex h-full w-full relative">
         <Offline offlineStatus={offlineStatus}/>
         <Side closeToggle={closeToggle}/>
-        {closeToggle && (
-            <div className="w-full h-full bg-black bg-opacity-30 sm:hidden fixed z-[30]"/>
-        )}
-        <div className={`bg-transparent gap-[15px] w-full h-full text-black  pt-[79px] pr-[15px] pb-[15px] flex ${closeToggle ? 'max-sm:pl-[15px] sm:pl-[15px]':'max-sm:pl-[15px] sm:pl-[100px]'} `}>
-            <div className={`bg-transparent  w-full gap-[15px] flex flex-col ${lengthOfDetailDataById === 0 ? '':'pr-[320px]'}`}>
+        <Backoffline offlineStatus={offlineStatus}  closeToggle={closeToggle} />
+        <div className={`bg-transparent  gap-[15px] w-full h-full text-black  pt-[79px] pr-[15px] pb-[15px] flex ${closeToggle ? 'max-sm:pl-[15px] sm:pl-[15px]':'max-sm:pl-[15px] sm:pl-[100px]'} `}>
+            <div className={`bg-transparent overflow-hidden w-full gap-[15px] flex flex-col ${lengthOfDetailDataById === 0 ? '':'mx:pr-[320px]'}`}>
             {detailData && detailData.map((detail, index) => (
                 <button key={index} onClick={() => fetchDetailPenjualanId(detail.PenjualanID.id)} className="w-full bg-white p-[20px] items-center rounded-xl hover:border-[2px] border border-white hover:border-yellow-500 flex justify-between">
                     <div className="flex items-center gap-[15px]">
@@ -99,14 +106,16 @@ const History = () => {
                 </button>
                 ))}
             </div>
-            <div className="bg-transparent pt-[80px] pb-[20px] max-w-[300px] w-full top-0  h-full fixed right-[20px]" >
               {detailDataById &&
-                <div className="w-full flex flex-col gap-[10px] h-full bg-white rounded-xl" >
+            <div className="bg-transparent mx:z-[40] max-mx:flex max-mx:justify-center max-mx:items-end max-mx:bg-black max-mx:bg-opacity-30 max-mx:w-full z-[99] max-mx:fixed max-mx:left-0  pt-[80px] mx:pb-[20px] mx:max-w-[300px] w-full top-0 max-mx:bottom-0 max-mx:h-auto  mx:h-full fixed mx:right-[20px]" >
+                <div className="w-full max-mx:max-w-[500px] flex flex-col gap-[10px] mx:h-full max-mx:h-auto bg-white mx:rounded-xl max-mx:rounded-t-xl" >
                     <div className="px-[15px] pt-[15px]">
+                        <div>
                         <p className="text-[14px] font-Roboto text-gray-500">Orders ID</p>
                         <p className="text-[20px] font-Roboto text-black font-bold">#{detailDataById.PenjualanID.id}</p>
+                        </div>
                     </div>
-                    <div className="bg-transparent px-[15px] flex flex-col hidden-scroll gap-[15px] max-h-full overflow-y-scroll h-full mt-[10px]">
+                    <div className="bg-transparent px-[15px] flex flex-col hidden-scroll gap-[15px] max-mx:h-auto mx:max-h-full mx:h-full max-mx:bg-transparent overflow-y-scroll mt-[10px]">
                     {itemDetail && itemDetail.map((item, index) => (
                     <div className="flex items-center gap-[10px]"  key={index}>
                         <div className="w-[50px] flex-shrink-0 h-[50px] bg-Yellow p-[5px] bg-opacity-30 rounded-md">
@@ -116,26 +125,24 @@ const History = () => {
                             <p className="font-Roboto font-bold">{item.ProdukID.NamaProduk}</p>
                             <div className="flex w-full justify-between bg-transparent">
                                 <div className="flex gap-[14px] text-gray-500 font-Roboto items-center">
-                                    <p>$2.30</p>
+                                    <p>{formatToRupiah(item.ProdukID.Harga)}</p>
                                     <p className="text-[12px]">x{item.JumlahProduk}</p>
                                 </div>
-                                <p className="font-Roboto font-bold">$11.24</p>
+                                <p className="font-Roboto font-bold">{formatToRupiah(item.Subtotal)} </p>
                             </div>
                         </div>
                     </div>
                     ))}
                     </div>
                     
-                    <div className="flex flex-col gap-[10px] px-[15px] pb-[15px]">
+                    <div className="flex flex-col gap-[10px] px-[15px] max-mx:mt-[20px] pb-[15px]">
                         <div className="flex flex-col gap-[10px]">
                         <div className="grid grid-cols-2">
                             <div>
-                                <p>Item(9)</p>
-                                <p>tax (10%)</p>
+                                <p>Item({lengthDetail})</p>
                             </div>
                             <div className="flex items-end flex-col">
-                                <p>$2.90</p>
-                                <p>$0.90</p>
+                                <p>{formatToRupiah(totalHarga)}</p>
                             </div>
                         </div>
                         <div>
@@ -144,7 +151,7 @@ const History = () => {
                                 <p>Total</p>
                             </div>
                             <div className="flex items-end flex-col">
-                                <p>$4.90</p>
+                                <p>{formatToRupiah(totalHarga)}</p>
                             </div>
                         </div>
                         </div>
@@ -158,13 +165,13 @@ const History = () => {
                                 </div>
                             </div>
                         </div>
-                        <button className="bg-Yellow  mt-[10px] font-medium text-white font-Roboto p-[10px] rounded-lg capitalize">
+                        <button onClick={closeDetailDataById} className="bg-Yellow  mt-[10px] font-medium text-white font-Roboto p-[10px] rounded-lg capitalize">
                             close bills
                         </button>
                     </div>
                 </div>
-            }
             </div>
+            }
            <Payment openPayment={openPayment} detailData={detailData} Tippy={Tippy}  details={details} handleDetailsDiscount={handleDetailsDiscount}  handleDetails={handleDetails} detailsDiscount={detailsDiscount} cartData={cartData}/>
         </div>
         <Warning openPayment={openPayment} detailData={detailData} handleOpenPayment={handleOpenPayment}/>

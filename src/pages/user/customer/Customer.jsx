@@ -7,6 +7,7 @@ import setStatusOffline from "../../../utils/Offline"
 import {useState, useEffect} from "../../../utils/React"
 import { getPelanggan} from "../../../utils/Service"
 import Offline from "../../../components/user/offline/Offline";
+import Backoffline from "../../../components/user/offline/BackOffline";
 
 const Customer = () => {
     const [details, handleDetails] = useToggle(false);
@@ -39,9 +40,7 @@ const Customer = () => {
     <div className="flex h-full w-full relative">
         <Offline offlineStatus={offlineStatus}/>
         <Side closeToggle={closeToggle}/>
-        {closeToggle && (
-            <div className="w-full h-full bg-black bg-opacity-30 sm:hidden fixed z-[30]"/>
-        )}
+        <Backoffline offlineStatus={offlineStatus}  closeToggle={closeToggle} />
         <div className={`bg-transparent flex-col gap-[15px] w-full h-full text-black  pt-[79px] pr-[15px] pb-[15px] flex ${closeToggle ? 'max-sm:pl-[15px] sm:pl-[15px]':'max-sm:pl-[15px] sm:pl-[100px]'} `}>
         <div className={`w-full h-auto  bg-white flex sticky top-[80px] shadow-2xl justify-between p-[15px] rounded-md items-center ${openAddProduct ? 'z-[60]':'z-[10]'}`}>
                 <p className="font-Roboto font-normal text-[17px]">Customer</p>

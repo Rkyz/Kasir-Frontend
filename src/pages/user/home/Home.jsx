@@ -10,6 +10,7 @@ import handleAddToCookie from "../../../utils/Payment/PaymentUtils";
 import Offline from "../../../components/user/offline/Offline";
 import PaymentMiddleware from "../../../middleware/PaymentMiddleware";
 import Icon from "../../../utils/Icon";
+import Backoffline from "../../../components/user/offline/BackOffline";
 
 const Home = () => {
     const [details, handleDetails] = useToggle(false);
@@ -72,7 +73,6 @@ const Home = () => {
         handleAddToCookie(produkID, quantity, handleOpenProduct);
     };
 
-    // Mendapatkan nilai sessionType dari session storage saat komponen dimuat
   const initialSessionType = sessionStorage.getItem('sessionType') || '';
 
   const [sessionType, setSessionType] = useState(initialSessionType);
@@ -97,17 +97,15 @@ const Home = () => {
 
     return (
         <div className={`w-full h-auto ${offlineStatus || openPayment || openSetting  ? 'max-h-screen overflow-hidden':''}`}>
-            <Top openSetting={openSetting} handleOpenSetting={handleOpenSetting} pelangganData={pelangganData} offlineStatus={offlineStatus}  handleOpenProduct={handleOpenProduct} handleOpenPayment={handleOpenPayment} openPayment={openPayment} handleCloseToggle={handleCloseToggle} closeToggle={closeToggle} openDropdown={openDropdown} handleOpenDropdown={handleOpenDropdown} openProduct={openProduct}/>
+            <Top openSetting={openSetting} closeToggle={closeToggle} handleOpenSetting={handleOpenSetting} pelangganData={pelangganData} offlineStatus={offlineStatus}  handleOpenProduct={handleOpenProduct} handleOpenPayment={handleOpenPayment} openPayment={openPayment} handleCloseToggle={handleCloseToggle} openDropdown={openDropdown} handleOpenDropdown={handleOpenDropdown} openProduct={openProduct}/>
             <div className="flex h-full w-full relative">
                 <Offline offlineStatus={offlineStatus}/>
-                <Side closeToggle={closeToggle}/>
-                {closeToggle && (
-                    <div className="w-full h-full bg-black bg-opacity-30 sm:hidden fixed z-[30]"/>
-                )}
+                <Side closeToggle={closeToggle} offlineStatus={offlineStatus}/>
+                <Backoffline offlineStatus={offlineStatus}  closeToggle={closeToggle} />
                 <Product  openProduct={openProduct} handleOpenProduct={handleOpenProduct} produkID={produkID} handleChangeQuantity={handleChangeQuantity} quantity={quantity} handleAddToCookieLocal={handleAddToCookieLocal}/>
                 <div className={`bg-transparent w-full h-full text-black pt-[79px] pr-[15px] pb-[15px] flex ${closeToggle ? 'max-sm:pl-[15px] sm:pl-[15px]':'max-sm:pl-[15px] sm:pl-[100px]'} `}>
                     <div className="w-full gap-[15px] relative">
-                        <div className={`w-full flex sticky bg-white rounded-md top-[79px] gap-[10px] items-center ${offlineStatus ? 'z-0':'z-20'} ${openPayment || openProduct ? 'z-10':'z-50'}`}>
+                        <div className={`w-full flex sticky bg-white rounded-md top-[79px] gap-[10px] items-center ${offlineStatus ? 'z-0':'z-20'} ${openPayment || openProduct ? 'z-10':'z-[20]'}`}>
                             
                             <Option/>
                         </div>

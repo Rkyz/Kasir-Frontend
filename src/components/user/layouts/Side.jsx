@@ -4,12 +4,12 @@ import { useToggle } from '../../../utils/Handle';
 import useHookLocation from '../../../utils/Path';
 import Icon from '../../../utils/Icon';
 
-const Side = ({closeToggle}) => {
+const Side = ({closeToggle, offlineStatus}) => {
     const location = useHookLocation();
     const currentPath = location.pathname;
     const [openProfile, handleOpenProfile] = useToggle(false)
   return (
-    <div className={`h-full z-[40] flex-col flex justify-between fixed bg-white  pb-[25px] pt-[76px] items-center ${closeToggle ? 'sm:hidden':'max-sm:hidden'}`}>
+    <div className={`h-full z-[40] flex-col flex justify-between fixed bg-white  pb-[25px] pt-[76px] items-center ${closeToggle  && !offlineStatus ? 'sm:hidden':'max-sm:hidden'}`}>
         
         <ul className='flex items-center flex-col w-full px-[7px] gap-[5px] '>
             <li className='w-full'>

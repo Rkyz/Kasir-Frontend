@@ -48,6 +48,9 @@ const Top = ({handleOpenPayment,offlineStatus,handleOpenSetting,openSetting,open
         {openProduct && (
             <div className="w-full absolute max-sm:hidden z-40 bg-black bg-opacity-30 h-full"/>
         )}
+        {/* {closeToggle && (
+            <div className="w-full absolute sm:hidden z-40 bg-black bg-opacity-30 h-full"/>
+        )} */}
         {/* {openPayment && (
             <div className="w-full absolute max-sm:hidden z-40 bg-black bg-opacity-30 h-full"/>
         )} */}
@@ -68,23 +71,22 @@ const Top = ({handleOpenPayment,offlineStatus,handleOpenSetting,openSetting,open
             )}
         </div>
         <div className="w-full max-sm:w-auto justify-end flex items-center gap-[10px] pr-[10px]">
-            <div className="relative">
+            <div className="">
                 <Tippy content="Dropdown" arrow arrowType="round" animation="scale" className={` ${openDropdown ? '':'max-sm:hidden'}`} >
-                <button onClick={handleOpenDropdown} className="bg-Gray p-[10px] text-[20px] rounded-lg text-Yellow sm:hidden">
+                <button 
+                    onClick={!closeToggle ? handleOpenDropdown : null} 
+                    className={`bg-Gray p-[10px] relative text-[20px] flex items-center justify-center overflow-hidden rounded-lg text-Yellow sm:hidden ${closeToggle ? 'cursor-not-allowed':''}`}
+                    disabled={closeToggle}
+                >
                     <Icon name="IoMdOptions"/>
+                    {closeToggle && (
+                        <div className='absolute w-full h-full bg-black bg-opacity-10'/>
+                    )}
                 </button>
+
                 </Tippy>
-                {/* <div className="absolute bg-white border-[2px] flex gap-[10px] flex-col border-Gray rounded-md overflow-visible pt-[20px] right-0 top-[60px] sm:hidden">
-                    <p className="text-nowrap uppercase font-Roboto font-normal tracking-widest text-[14px] text-black mx-[15px]">logged in 5 min ago</p>
-                    <div className="w-full h-auto"> 
-                        <button className="w-full h-auto bg-transparent text-black flex items-center px-[15px] py-[15px] gap-[10px] hover:bg-Gray">
-                            <LuLogOut className="text-[20px]"/>
-                            <p className="text-[16px] capitalize font-Roboto rounded-b-md">logout</p>
-                        </button>
-                    </div>
-                </div> */}
             </div>
-            <div className={`w-auto h-auto ${openDropdown ? 'max-sm:bg-white rounded-md max-sm:absolute max-sm:top-[70px] max-sm:py-[20px] max-sm:flex max-sm:gap-[20px] max-sm:flex-col ':'max-sm:hidden'}`}>
+            <div className={`w-auto h-auto ${openDropdown && closeToggle === false && offlineStatus == false ? 'max-sm:bg-white rounded-md max-sm:absolute max-sm:top-[70px] max-sm:py-[20px] max-sm:flex max-sm:gap-[20px] max-sm:flex-col ':'max-sm:hidden'}`}>
                 <div className="w-[20px] h-[20px] bg-white absolute -top-[10px] right-[9px] rotate-45 border-t sm:hidden border-gray-300 border-l "/>
                 <div className="px-[30px]">
                  <p className="text-nowrap uppercase font-Roboto font-normal tracking-widest text-[14px] text-black  sm:hidden">logged in 5 min ago</p>
@@ -92,7 +94,7 @@ const Top = ({handleOpenPayment,offlineStatus,handleOpenSetting,openSetting,open
                 <div className="flex w-full gap-[10px] justify-end  max-sm:w-auto max-sm:flex-col">
                     {currentPath === '/' && (
                     <Tippy content={hello[4]} arrow arrowType="round" animation="scale" className="max-sm:hidden">
-                    <button onClick={handleOpenSetting} className={`sm:bg-Gray  flex items-center justify-center max-sm:px-[25px] gap-[15px] p-[10px] text-[20px] rounded-lg sm:text-Yellow max-sm:flex max-sm:hover:text-Yellow ${openSetting ? 'z-[50]':''} `}>
+                    <button onClick={handleOpenSetting} className={`sm:bg-Gray  flex items-center justify-start max-sm:px-[25px] gap-[15px] p-[10px] text-[20px] rounded-lg sm:text-Yellow max-sm:flex max-sm:hover:text-Yellow ${openSetting ? 'z-[50]':''}  `}>
                         <Icon name="IoOptions"/>
                         <p className="sm:hidden max-sm:text-[16px]">{hello[3]}</p>
                     </button>
@@ -129,13 +131,13 @@ const Top = ({handleOpenPayment,offlineStatus,handleOpenSetting,openSetting,open
                  {currentPath !== '/payment' && (
                      <button onClick={handleOpenProduct} className="sm:flex sm:bg-Yellow p-[10px] max-sm:px-[25px] sm:gap-[10px] max-sm:gap-[15px] rounded-lg sm:text-white  items-center max-sm:flex max-sm:hover:text-Yellow ">
                     <Icon name="MdOutlineTableRestaurant" className="text-[20px]"/>
-                    <p className="sm:text-[13px] max-sm:text-[16px] capitalize">select table</p>
+                    <p className="sm:text-[13px] max-sm:text-[16px] capitalize text-nowrap">select table</p>
                 </button>
                  )}
                  {currentPath === '/payment' && (
                      <button onClick={handleCancelPayment} className="sm:flex sm:bg-Yellow p-[10px] max-sm:px-[25px] sm:gap-[10px] max-sm:gap-[15px] rounded-lg sm:text-white  items-center max-sm:flex max-sm:hover:text-Yellow ">
                     <Icon name="MdOutlineTableRestaurant" className="text-[20px]"/>
-                    <p className="sm:text-[13px] max-sm:text-[16px] capitalize">cancel payment</p>
+                    <p className="sm:text-[13px] max-sm:text-[16px] capitalize text-nowrap">cancel payment</p>
                 </button>
                  )}
                 </div>

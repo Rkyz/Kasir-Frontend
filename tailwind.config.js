@@ -13,6 +13,9 @@ export default {
         'Yellow': '#F57B0F',
         'Gray': '#EBEBEB',
         'Blue': '#5846D1'
+      },
+      screens:{
+        'mx' :'900px'
       }
     },
   },
