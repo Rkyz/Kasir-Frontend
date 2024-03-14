@@ -2,9 +2,10 @@ import axios from "axios";
 
 const apiUrl =  import.meta.env.VITE_SOME_API;
 console.log(apiUrl)
+const token = localStorage.getItem('token');
+
 
 export const createPelanggan = async (data) => {
-    const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
     try {
         const response = await axios.post(
             `${apiUrl}/buying/create`, 
@@ -24,7 +25,6 @@ export const createPelanggan = async (data) => {
 };  
 
 export const getAllDetail = async () => {
-    const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
     try {
         const response = await axios.get(
             `${apiUrl}/detail`,
@@ -42,7 +42,6 @@ export const getAllDetail = async () => {
     }
 };  
 export const searchDetail = async (id) => {
-    const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
     try {
         const response = await axios.get(
             `${apiUrl}/detail/${id}`,

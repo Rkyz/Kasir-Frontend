@@ -2,9 +2,9 @@ import axios from "axios";
 
 const apiUrl =  import.meta.env.VITE_SOME_API;
 console.log(apiUrl)
+const token = localStorage.getItem('token');
 
 export const getProdukDataByID = async (productId) => {
-  const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
   try {
       const response = await axios.get(
           `${apiUrl}/product/${productId}`, {
@@ -22,7 +22,6 @@ export const getProdukDataByID = async (productId) => {
 };
 
 export const getProdukData = async () => {
-    const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
     try {
         const response = await axios.get(
             `${apiUrl}/product`, {
@@ -40,7 +39,6 @@ export const getProdukData = async () => {
 };
 
 export const createProduk = async (data) => {
-    const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
     try {
         const response = await axios.post(
             `${apiUrl}/product/create`, 
@@ -60,7 +58,6 @@ export const createProduk = async (data) => {
 };
 
 export const editProduk = async (id, data) => {
-    const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
     try {
         const response = await axios.put(
             `${apiUrl}/product/edit/${id}`, 
@@ -80,7 +77,6 @@ export const editProduk = async (id, data) => {
 };
 
 export const deleteProduk = async (id) => {
-    const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
     try {
         const response = await axios.delete(
             `${apiUrl}/product/delete/${id}`,

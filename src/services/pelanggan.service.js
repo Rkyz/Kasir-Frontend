@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const apiUrl =  import.meta.env.VITE_SOME_API;
+const token = localStorage.getItem('token');
 console.log(apiUrl)
 
 export const getPelanggan = async () => {
-    const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
     try {
         const response = await axios.get(
             `${apiUrl}/customer`, {
@@ -22,7 +22,6 @@ export const getPelanggan = async () => {
 };
 
 export const createPelanggan = async (data) => {
-    const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
     try {
         const response = await axios.post(
             `${apiUrl}/customer/create`, 
@@ -42,7 +41,6 @@ export const createPelanggan = async (data) => {
 };
 
 export const editPelanggan = async (id, data) => {
-    const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
     try {
         const response = await axios.put(
             `${apiUrl}/customer/edit/${id}`, 

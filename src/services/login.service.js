@@ -1,22 +1,18 @@
 import axios from "axios";
 
-const apiUrl =  import.meta.env.VITE_SOME_API;
-console.log(apiUrl)
+const apiUrl = import.meta.env.VITE_SOME_API;
 
-export const getPelanggan = async () => {
-    const token = '1|mDlzYqiomum1YCS3MexEwlVKROLVJuyIrUJ9Jor8a84ade63';
+export const postLogin = async (email, password) => {
     try {
-        const response = await axios.get(
-            `${apiUrl}/customer`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            }
+        const response = await axios.post(
+            `${apiUrl}/login`,
+            { email, password } 
         );
         return response;
     } catch (error) {
         if (error.response) {
             throw error.response.data.message;
         }
+        throw error; 
     }
 };

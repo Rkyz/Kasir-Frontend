@@ -11,6 +11,7 @@ import Offline from "../../../components/user/offline/Offline";
 import PaymentMiddleware from "../../../middleware/PaymentMiddleware";
 import Icon from "../../../utils/Icon";
 import Backoffline from "../../../components/user/offline/BackOffline";
+import useNavigateIfTokenEmpty from "../../../middleware/CheckingToken";
 
 const Home = () => {
     const [details, handleDetails] = useToggle(false);
@@ -79,7 +80,7 @@ const Home = () => {
 
   const handleInputClick = () => {
     setSessionType('input');
-    sessionStorage.setItem('sessionType', 'input'); // Menyimpan nilai sessionType dalam session storage
+    sessionStorage.setItem('sessionType', 'input');
     sessionStorage.removeItem('cartData');
 
     
@@ -87,12 +88,10 @@ const Home = () => {
 
   const handleButtonClick = () => {
     setSessionType('button');
-    sessionStorage.setItem('sessionType', 'button'); // Menyimpan nilai sessionType dalam session storage
+    sessionStorage.setItem('sessionType', 'button'); 
     sessionStorage.removeItem('cartData');
   };
-    
-
-
+  
     const cartData = JSON.parse(sessionStorage.getItem('cartData')) || [];
 
     return (

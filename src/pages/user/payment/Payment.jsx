@@ -24,6 +24,11 @@ const Payment = () => {
     const navigate = useNavigate(); // Initialize useNavigate hook
     const [dataCart, setDataCart] = useState([]);
     const [dataPelanggan, setDataPelanggan] = useState(null);
+    const [credit, setCredit] = useState(0);
+
+    const handleSetCredit = () => {
+        setCredit(inputValue)
+    }
 
     useEffect(() => {
         const cartData = JSON.parse(sessionStorage.getItem('cartData'));
@@ -69,6 +74,8 @@ const Payment = () => {
         }
     };
 
+    console.log(dataCart)
+
   return (
     <div className="w-full h-screen">
         <Top offlineStatus={offlineStatus} />
@@ -104,8 +111,8 @@ const Payment = () => {
                                     <p>balance</p>
                                 </div>
                                 <div className="flex items-end justify-end flex-col capitalize font-normal text-[16px]">
-                                    <p>$200</p>
-                                    <p>-5.0</p>
+                                    <p>{credit}</p>
+                                    <p>-{dataCart.Harga}</p>
                                 </div>
                             </div>
                             <button onClick={handleSubmit} className="bg-[#09A327] capitalize flex items-center justify-center gap-[5px] text-white p-[15px] rounded-md ">
@@ -157,7 +164,7 @@ const Payment = () => {
                             <button onClick={() => handleCancelClick()} className="bg-Gray capitalize col-span-2 rounded-sm text-[20px] font-bold p-[20px]">
                                 cancel
                             </button>
-                            <button onClick={() => handleCancelClick()} className="bg-Gray capitalize rounded-sm text-[20px] font-bold p-[20px]">
+                            <button onClick={handleSetCredit} className="bg-Gray capitalize rounded-sm text-[20px] font-bold p-[20px]">
                                 Submit
                             </button>
 
