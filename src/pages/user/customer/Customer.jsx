@@ -35,14 +35,14 @@ const Customer = () => {
 
   
   return (
-    <div className={`w-full h-auto ${offlineStatus || openPayment || openAddProduct ? 'max-h-screen overflow-hidden':''}`}>
+    <div className={`w-full h-screen ${offlineStatus || openPayment || openAddProduct ? 'max-h-screen overflow-hidden':''}`}>
     <Top pelangganData={pelangganData} offlineStatus={offlineStatus}  handleOpenPayment={handleOpenPayment} openPayment={openPayment} handleCloseToggle={handleCloseToggle} closeToggle={closeToggle} openDropdown={openDropdown} handleOpenDropdown={handleOpenDropdown}/>
     <div className="flex h-full w-full relative">
         <Offline offlineStatus={offlineStatus}/>
         <Side closeToggle={closeToggle}/>
         <Backoffline offlineStatus={offlineStatus}  closeToggle={closeToggle} />
         <div className={`bg-transparent flex-col gap-[15px] w-full h-full text-black  pt-[79px] pr-[15px] pb-[15px] flex ${closeToggle ? 'max-sm:pl-[15px] sm:pl-[15px]':'max-sm:pl-[15px] sm:pl-[100px]'} `}>
-        <div className={`w-full h-auto  bg-white flex sticky top-[80px] shadow-2xl justify-between p-[15px] rounded-md items-center ${openAddProduct ? 'z-[60]':'z-[10]'}`}>
+        <div className={`w-full h-auto relative  bg-white flex sticky top-[80px] shadow-2xl justify-between p-[15px] rounded-md items-center ${openAddProduct ? 'z-[60]':'z-[10]'}`}>
                 <p className="font-Roboto font-normal text-[17px]">Customer</p>
                 <Tippy content={openAddProduct ? 'Close Add Customer':'Open Add Customer'} arrow arrowType="round" animation="scale" placement="left"  >
                 <button onClick={handleOpenAddProduct} className={`${openAddProduct ? 'bg-red-500 text-white':'bg-Yellow text-white'} z-[60]  p-[7px] rounded-md`}>
@@ -56,12 +56,12 @@ const Customer = () => {
                 {openAddProduct && (
                     <>
                         <AddCustomer/>
-                        <div className="w-full h-full absolute bg-black left-0 bg-opacity-30 rounded-md"/> 
+                        <div className="w-full h-full absolute bg-black top-0 left-0 bg-opacity-30 rounded-md"/> 
                     </>
                 )}
                 </div>
                 {openAddProduct && (
-                    <div className="absolute w-full h-screen bg-black top-0 z-50 bg-opacity-30 left-0"/>
+                    <div className="absolute w-full h-full bg-black top-0 z-50 bg-opacity-30 left-0"/>
                 )}
                 <div className="bg-white min-w-full overflow-x-auto rounded-md p-[10px] grid grid-flow-dense grid-cols-1 gap-[10px] w-full">
                     <TablePelanggan pelangganData={pelangganData} />     

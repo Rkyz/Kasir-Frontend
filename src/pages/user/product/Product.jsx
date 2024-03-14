@@ -35,7 +35,7 @@ const Customer = () => {
 
   
   return (
-    <div className={`w-full h-auto ${offlineStatus || openPayment || openAddProduct ? 'max-h-screen overflow-hidden':''}`}>
+    <div className={`w-full h-screen ${offlineStatus || openPayment || openAddProduct ? 'max-h-screen overflow-hidden':''}`}>
     <Top produkData={produkData} offlineStatus={offlineStatus}  handleOpenPayment={handleOpenPayment} openPayment={openPayment} handleCloseToggle={handleCloseToggle} closeToggle={closeToggle} openDropdown={openDropdown} handleOpenDropdown={handleOpenDropdown}/>
     <div className="flex h-full w-full relative">
         <Offline offlineStatus={offlineStatus}/>

@@ -8,7 +8,7 @@ const token = localStorage.getItem('token');
 export const createPelanggan = async (data) => {
     try {
         const response = await axios.post(
-            `${apiUrl}/buying/create`, 
+            `https://8000.rioalamsyah.my.id/api/buying/create`, 
             data,
             {
                 headers: {

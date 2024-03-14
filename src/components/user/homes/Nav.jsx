@@ -83,9 +83,8 @@ const Nav = ({ Tippy, pelangganData}) => {
                     id=""
                     className='w-full bg-transparent outline-none  p-[10px]'
                     onChange={(e) => handleSelectCustomer(e.target.value)}
-                    defaultValue={sessionStorage.getItem('pelangganData') ? JSON.parse(sessionStorage.getItem('pelangganData')).pelangganID : ""}
                 >
-                    <option value="guest" disabled>Guest</option>
+                    <option value="guest">Guest</option>
                     {pelangganData && pelangganData.map((pelanggan, index) => (
                         <option 
                             value={pelanggan.pelangganID} 
