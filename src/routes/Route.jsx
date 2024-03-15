@@ -8,7 +8,7 @@ import History from '../pages/user/history/History';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/dashboard',
     element: <Home />,
   },
   {
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     element: <History />,
   },
   {
-    path: '/login',
+    path: '/',
     element: <Login />,
   },
 ]);

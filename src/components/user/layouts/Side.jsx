@@ -13,7 +13,7 @@ const Side = ({closeToggle, offlineStatus}) => {
         
         <ul className='flex items-center flex-col w-full px-[7px] gap-[5px] '>
             <li className='w-full'>
-                <Link to="/" className={`flex items-center flex-col w-[70px] justify-center h-[70px] rounded-md capitalize ${currentPath === '/' ? 'text-Yellow border-[2px] bg-opacity-15 border-Yellow bg-Yellow ':'hover:bg-Gray '}`}>
+                <Link to="/dashboard" className={`flex items-center flex-col w-[70px] justify-center h-[70px] rounded-md capitalize ${currentPath === '/dashboard' ? 'text-Yellow border-[2px] bg-opacity-15 border-Yellow bg-Yellow ':'hover:bg-Gray '}`}>
                     <Icon name="IoPeopleOutline" className='text-[20px]'/>
                     <p className='text-[14px]'>home</p>
                 </Link>

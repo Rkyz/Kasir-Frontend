@@ -9,7 +9,7 @@ import Icon from "../../../utils/Icon";
 
 
 // eslint-disable-next-line react/prop-types
-const Top = ({handleOpenPayment,offlineStatus,handleOpenSetting,openSetting,openProduct,
+const Top = ({handleOpenPayment,offlineStatus,handleOpenSetting,openSetting,openProduct,openAddProduct,
     // eslint-disable-next-line react/prop-types
      handleCloseToggle, closeToggle, handleOpenDropdown, openDropdown, openPayment, handleOpenProduct}) => {
 
@@ -46,6 +46,9 @@ const Top = ({handleOpenPayment,offlineStatus,handleOpenSetting,openSetting,open
             <div className="w-full absolute max-sm:hidden z-40 bg-black bg-opacity-30 h-full"/>
         )}
         {openProduct && (
+            <div className="w-full absolute max-sm:hidden z-40 bg-black bg-opacity-30 h-full"/>
+        )}
+        {openAddProduct && (
             <div className="w-full absolute max-sm:hidden z-40 bg-black bg-opacity-30 h-full"/>
         )}
         {/* {closeToggle && (

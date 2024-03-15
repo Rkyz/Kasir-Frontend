@@ -2,14 +2,18 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import kasir from '../../../assets/mesin2.png';
 import { postLogin } from '../../../services/login.service';
+import { useToggle } from '../../../utils/Handle';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null)
   const navigate = useNavigate();
+  const [loading, setLoading] = useToggle(false);
 
   const login = async () => {
+    setLoading(true)
+
     try {
       const response = await postLogin(email, password); 
       console.log(response.data, 'token')
@@ -17,12 +21,15 @@ const Login = () => {
       if (response.data.status === '200') {
         navigate("/dashboard")
       } else {
-        return null
+        return null;
       }
-
       localStorage.setItem('token', response.data.token); 
     } catch (error) {
       console.error(error);
+      setLoading(false)
+    } finally {
+      window.location.reload();
+      setLoading(false);
     }
   };
 
@@ -59,7 +66,9 @@ const Login = () => {
           </div>
         </div>
         <div className='w-full px-[50px]'>
-          <button onClick={login} className='w-full p-[10px] bg-Yellow bg-opacity-80 text-white rounded-md capitalize '>sign in</button>
+        <button onClick={login} disabled={loading === true} className={`w-full p-[10px] bg-Yellow bg-opacity-80 text-white rounded-md capitalize ${loading ? 'cursor-not-allowed' : ''}`}>
+          {loading === true ? 'Loading...' : 'Sign In'}
+        </button>
         </div>
         <p className='capitalize'>-- on sign in with --</p>
         <div className='grid grid-cols-3 w-full px-[50px] gap-[10px]'>

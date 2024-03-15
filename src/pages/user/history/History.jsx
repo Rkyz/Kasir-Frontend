@@ -30,7 +30,8 @@ const History = () => {
             try {
                 const response = await getAllDetail();
                 setdetailData(response.data.data);
-                console.log(response.data.data)
+                console.log(response.data.data,'hello asu')
+
               } catch (error) {
               console.error(error)
               }
@@ -46,7 +47,7 @@ const History = () => {
                 setItemDetail(response.data.data.items)
                 setTotalHarga(response.data.data.PenjualanID.TotalHarga)
                 console.log(response.data.data.PenjualanID,'Hello Guys')
-                console.log(response.data)
+                console.log(response.data,'hello')
               } catch (error) {
               console.error(error)
               }
