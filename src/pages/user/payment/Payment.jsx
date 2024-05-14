@@ -3,7 +3,6 @@
 
 import List from "../../../components/user/payments/List";
 import Top from "../../../components/user/layouts/Top"
-import Money from "../../../components/user/payments/money";
 import 'tippy.js/animations/scale.css';
 import 'tippy.js/dist/tippy.css';
 import { useToggle } from "../../../utils/Handle"
@@ -102,7 +101,7 @@ const Payment = () => {
                     <div className="w-full pt-[84.8px] bg-transparent h-full flex items-center flex-col justify-between">
                         <div className="w-full bg-transparent h-auto flex flex-col items-center">
                                 <List dataCart={dataCart} handleDetails={handleDetails}  details={details} />
-                                <Money/>
+                                {/* <Money/> */}
                         </div>
                         <div className="w-full p-[10px] flex flex-col gap-[15px]">
                             <div className="w-full grid grid-cols-2 h-auto bg-Gray p-[10px] ">
