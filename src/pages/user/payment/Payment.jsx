@@ -1,7 +1,7 @@
 
 // import { useEffect, useRef, useState } from "react"
 
-import List from "../../../components/user/payments/list";
+import List from "../../../components/user/payments/List";
 import Top from "../../../components/user/layouts/Top"
 import Money from "../../../components/user/payments/money";
 import 'tippy.js/animations/scale.css';
