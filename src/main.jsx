@@ -5,7 +5,7 @@ import "./index.css";
 import "./App.css";
 import 'tippy.js/animations/scale.css';
 import 'tippy.js/dist/tippy.css';
-import router from "./routes/route";
+import router from "./routes/Route";
 import { ProductProvider } from "./context/ProductContext.jsx";
 
 
