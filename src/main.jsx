@@ -5,13 +5,12 @@ import "./index.css";
 import "./App.css";
 import 'tippy.js/animations/scale.css';
 import 'tippy.js/dist/tippy.css';
-import router from "./routes/route.jsx";
+import router from "./routes/route";
 import { ProductProvider } from "./context/ProductContext.jsx";
 
 
 
 const Main = () => {
-  
   return (
     <>
       <React.StrictMode>
