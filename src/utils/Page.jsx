@@ -10,5 +10,5 @@ import TablePelanggan from "../components/user/customers/Table"
 import TableProduk from "../components/user/product/Table"
 
 export { 
-    Top, Warning, Payment,Item, Side,AddCustomer, TablePelanggan, TableProduk, AddProduct, option
+    Top, Warning, Payment,Item, Side,AddCustomer, TablePelanggan, TableProduk, AddProduct, Option
  };
